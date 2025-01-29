@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المؤقت - لحظة تركيز</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .timer-container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .time-input {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .time-input input {
+            width: 100px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .time-input input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            outline: none;
+        }
+
+        .time-input input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .timer-display {
+            font-size: 96px;
+            font-weight: 700;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            letter-spacing: 4px;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .timer-controls button {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .start-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .pause-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .pause-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .reset-btn {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 25px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .home-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* تحسين مظهر الأرقام في حقول الإدخال */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-btn" onclick="location.href='index2.html'">العودة للرئيسية</button>
+    <div class="timer-container">
+        <h1>المؤقت</h1>
+        <div class="time-input">
+            <input type="number" id="hours" placeholder="ساعات" min="0" max="23">
+            <input type="number" id="minutes" placeholder="دقائق" min="0" max="59">
+            <input type="number" id="seconds" placeholder="ثواني" min="0" max="59">
+        </div>
+        <div class="timer-display">00:00:00</div>
+        <div class="timer-controls">
+            <button class="start-btn" onclick="startTimer()">بدء</button>
+            <button class="pause-btn" onclick="pauseTimer()">إيقاف مؤقت</button>
+            <button class="reset-btn" onclick="resetTimer()">إعادة ضبط</button>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 0;
+        let timerId = null;
+
+        function updateDisplay() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            document.querySelector('.timer-display').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerId === null) {
+                if (timeLeft === 0) {
+                    const hours = parseInt(document.getElementById('hours').value) || 0;
+                    const minutes = parseInt(document.getElementById('minutes').value) || 0;
+                    const seconds = parseInt(document.getElementById('seconds').value) || 0;
+                    timeLeft = hours * 3600 + minutes * 60 + seconds;
+                }
+                
+                if (timeLeft > 0) {
+                    timerId = setInterval(() => {
+                        timeLeft--;
+                        if (timeLeft < 0) {
+                            clearInterval(timerId);
+                            timerId = null;
+                            timeLeft = 0;
+                        }
+                        updateDisplay();
+                    }, 1000);
+                }
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerId);
+            timerId = null;
+        }
+
+        function resetTimer() {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = 0;
+            document.getElementById('hours').value = '';
+            document.getElementById('minutes').value = '';
+            document.getElementById('seconds').value = '';
+            updateDisplay();
+        }
+    </script>
+</body>
+</html> 

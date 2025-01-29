@@ -1,0 +1,171 @@
+    <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - لحظة تركيز</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .main-content {
+            background: #000000e6;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #000000;
+            border: 2px solid #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .feature-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- تأثير الإضاءة -->
+    <div class="light-effect"></div>
+
+    <div class="main-content">
+        <h1 class="welcome-text">أهلاً بك في لحظة تركيز</h1>
+        <div class="user-info" id="userInfo">
+            مرحباً بك في موقعنا
+        </div>
+
+        <div class="features-grid">
+            <!-- Pomodoro Technique -->
+            <div class="feature-card" onclick="location.href='pomodoro.html'">
+                <div class="feature-icon">⏱️</div>
+                <div class="feature-title">تقنية بومودورو</div>
+                <div class="feature-description">
+                    استخدم تقنية بومودورو للتركيز وإدارة وقتك بفعالية
+                </div>
+            </div>
+
+            <!-- Timer -->
+            <div class="feature-card" onclick="location.href='timer.html'">
+                <div class="feature-icon">⌛</div>
+                <div class="feature-title">المؤقت</div>
+                <div class="feature-description">
+                    مؤقت مخصص لتنظيم جلسات العمل والراحة
+                </div>
+            </div>
+
+            <!-- To-Do List -->
+            <div class="feature-card" onclick="location.href='todo.html'">
+                <div class="feature-icon">📝</div>
+                <div class="feature-title">قائمة المهام</div>
+                <div class="feature-description">
+                    نظم مهامك وتتبع إنجازاتك بسهولة
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="feature-card" onclick="location.href='qa.html'">
+                <div class="feature-icon">⚙️</div>
+                <div class="feature-title">سوال وجواب</div>
+                <div class="feature-description">
+                   جه بها سوال وجه بها جواب 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('userInfo').textContent = `مرحباً ${username}!`;
+            }
+
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            if (settings) {
+                applyTheme(settings.theme);
+                applyPomodoroSettings(settings.workDuration, settings.breakDuration);
+                applySoundSettings(settings.soundEnabled, settings.volume);
+            }
+        });
+
+        function applyTheme(theme) {
+            // قم بتطبيق السمة هنا
+        }
+
+        function applyPomodoroSettings(workDuration, breakDuration) {
+            // قم بتطبيق إعدادات بومودورو هنا
+        }
+
+        function applySoundSettings(soundEnabled, volume) {
+            // قم بتطبيق إعدادات الصوت هنا
+        }
+
+        // تتبع حركة الماوس لتحريك الإضاءة
+        document.addEventListener('mousemove', (e) => {
+            const light = document.querySelector('.light-effect');
+            const x = e.clientX - 400;
+            const y = e.clientY - 400;
+            light.style.left = x + 'px';
+            light.style.top = y + 'px';
+        });
+    </script>
+</body>
+</html>

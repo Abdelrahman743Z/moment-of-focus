@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - لحظة تركيز</title>
+    <link rel="stylesheet" href="styles.css"> <!-- رابط ملف CSS -->
+    <script src="draw-effect.js" defer></script>
+</head>
+<body>
+    <!-- نقل الكانفاس إلى أعلى الصفحة مباشرة -->
+    <canvas id="drawCanvas" style="position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;"></canvas>
+    
+    <!-- رسالة الترحيب -->
+    <div id="welcomeMessage" class="welcome-message">
+        <h2>مرحبا بك في موقع لحظة تركيز!</h2>
+    </div>
+
+    <!-- واجهة تسجيل الدخول -->
+    <div id="loginContainer" class="login-container" style="display: none;">
+        <h2>تسجيل الدخول</h2>
+        <form class="login-form" onsubmit="submitForm(); return false;">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="اسم المستخدم" required>
+            </div>
+            <div class="input-group">
+                <input type="number" id="age" placeholder="العمر" required>
+            </div>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
+        <!-- رسالة النجاح -->
+        <div id="successMessage" class="success-message">
+            تم التسجيل بنجاح!
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- رابط ملف JavaScript -->
+</body>
+</html>

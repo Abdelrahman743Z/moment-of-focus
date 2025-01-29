@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقنية بومودورو - لحظة تركيز</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pomodoro-container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timer-display {
+            font-size: 96px;
+            font-weight: 700;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            letter-spacing: 4px;
+        }
+
+        .phase-indicator {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .timer-controls button {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .start-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .pause-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .pause-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .reset-btn {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 25px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .home-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-btn" onclick="location.href='index2.html'">العودة للرئيسية</button>
+    <div class="pomodoro-container">
+        <h1>تقنية بومودورو</h1>
+        <div class="timer-display">25:00</div>
+        <div class="phase-indicator">وقت العمل</div>
+        <div class="timer-controls">
+            <button class="start-btn" onclick="startTimer()">بدء</button>
+            <button class="pause-btn" onclick="pauseTimer()">إيقاف مؤقت</button>
+            <button class="reset-btn" onclick="resetTimer()">إعادة ضبط</button>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let timerId = null;
+        let isWorkPhase = true;
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.querySelector('.timer-display').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerId === null) {
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft < 0) {
+                        if (isWorkPhase) {
+                            timeLeft = 5 * 60; // 5 minutes break
+                            isWorkPhase = false;
+                            document.querySelector('.phase-indicator').textContent = 'وقت الراحة';
+                        } else {
+                            timeLeft = 25 * 60; // 25 minutes work
+                            isWorkPhase = true;
+                            document.querySelector('.phase-indicator').textContent = 'وقت العمل';
+                        }
+                    }
+                    updateDisplay();
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerId);
+            timerId = null;
+        }
+
+        function resetTimer() {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = 25 * 60;
+            isWorkPhase = true;
+            document.querySelector('.phase-indicator').textContent = 'وقت العمل';
+            updateDisplay();
+        }
+    </script>
+</body>
+</html> 
