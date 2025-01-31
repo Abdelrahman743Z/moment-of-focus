@@ -5,196 +5,238 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سؤال وجواب - لحظة تركيز</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .qa-container {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: center;
-            color: var(--text-color);
-        }
-
-        .qa-box {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            min-height: 200px;
-            min-width: 400px;
-            cursor: pointer;
-            transition: transform 0.6s ease;
+        .flashcard-container {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
         }
 
-        .qa-box.flipped {
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .flashcard.flipped .flashcard-inner {
             transform: rotateY(180deg);
         }
 
-        .qa-box textarea {
+        .flashcard-front, .flashcard-back {
+            position: absolute;
             width: 100%;
             height: 100%;
-            border: none;
-            outline: none;
-            resize: none;
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 10px;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-            color: #000000;
-            background: #f9f9f9;
-        }
-
-        .qa-buttons {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .qa-button {
-            background: #4CAF50;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 5px;
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .qa-button:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-        }
-
-        .qa-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-        }
-
-        .saved-questions {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .saved-questions ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .saved-questions li {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .saved-questions li:hover {
-            background: #e9e9e9;
-        }
-
-        .answer-area {
-            flex: 1;
-            cursor: pointer;
+            backface-visibility: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
-            font-size: 14px;
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+        }
+
+        .add-card-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .card-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .card-counter {
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .flashcard {
+            animation: cardAppear 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="qa-container">
-        <h1>سؤال وجواب</h1>
-        <div class="qa-box" id="qaBox">
-            <input type="text" id="questionInput" class="qa-input" placeholder="" onclick="event.stopPropagation();">
-            <div class="answer-area" onclick="flipCard()">
-                <!-- تأكد من وجود مساحة كافية للنقر -->
-                <span>اضغط هنا لكتابة الجواب</span>
+    <div class="container">
+        <h1 class="text-center">بطاقات المراجعة</h1>
+        
+        <div class="add-card-form">
+            <div class="form-group">
+                <label for="questionInput">السؤال:</label>
+                <textarea id="questionInput" rows="3" required></textarea>
             </div>
+            <div class="form-group">
+                <label for="answerInput">الإجابة:</label>
+                <textarea id="answerInput" rows="3" required></textarea>
+            </div>
+            <button class="btn" onclick="saveQuestion()">
+                <i class="fas fa-plus"></i> إضافة بطاقة
+            </button>
         </div>
-        <div class="qa-buttons">
-            <button class="qa-button" onclick="addQuestion()">إضافة</button>
-            <button class="qa-button" onclick="saveQuestion()">حفظ</button>
+
+        <div class="card-controls">
+            <button class="btn" onclick="showPreviousCard()">
+                <i class="fas fa-chevron-right"></i> السابق
+            </button>
+            <button class="btn" onclick="showNextCard()">
+                التالي <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
-        <div class="saved-questions">
-            <h2>الأسئلة المحفوظة</h2>
-            <ul id="questionList"></ul>
+
+        <div class="card-counter">
+            البطاقة <span id="currentCard">1</span> من <span id="totalCards">1</span>
         </div>
+
+        <div class="flashcard-container" id="flashcardContainer"></div>
     </div>
 
     <script>
-        let isFlipped = false;
-        const questionList = document.getElementById('questionList');
+        let currentCardIndex = 0;
+        let cards = [];
 
-        function flipCard() {
-            const qaBox = document.getElementById('qaBox');
-            const questionInput = document.getElementById('questionInput');
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
 
-            if (!isFlipped) {
-                const answerInput = document.createElement('textarea');
-                answerInput.placeholder = 'اكتب الجواب هنا...';
-                qaBox.innerHTML = '';
-                qaBox.appendChild(answerInput);
-                answerInput.focus();
-                qaBox.classList.add('flipped');
-                isFlipped = true;
-            } else {
-                qaBox.innerHTML = '';
-                qaBox.appendChild(questionInput);
-                qaBox.classList.remove('flipped');
-                isFlipped = false;
+        function showPreviousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCardDisplay();
             }
         }
 
-        function addQuestion() {
-            const questionInput = document.getElementById('questionInput');
-            const question = questionInput.value.trim();
-
-            if (question) {
-                alert(`تم إضافة السؤال: ${question}`);
-                questionInput.value = '';
-            } else {
-                alert('يرجى كتابة سؤال قبل الإضافة.');
+        function showNextCard() {
+            if (currentCardIndex < cards.length - 1) {
+                currentCardIndex++;
+                updateCardDisplay();
             }
+        }
+
+        function updateCardDisplay() {
+            const container = document.getElementById('flashcardContainer');
+            container.innerHTML = '';
+            
+            if (cards.length > 0) {
+                const card = cards[currentCardIndex];
+                const cardElement = createCardElement(card.question, card.answer);
+                container.appendChild(cardElement);
+                
+                document.getElementById('currentCard').textContent = (currentCardIndex + 1).toString();
+                document.getElementById('totalCards').textContent = cards.length.toString();
+            }
+        }
+
+        function createCardElement(question, answer) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'flashcard';
+            cardDiv.innerHTML = `
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>${question}</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <p>${answer}</p>
+                    </div>
+                </div>
+            `;
+            cardDiv.onclick = () => flipCard(cardDiv);
+            return cardDiv;
         }
 
         function saveQuestion() {
-            const questionInput = document.getElementById('questionInput');
-            const question = questionInput.value.trim();
-            const answer = document.querySelector('.qa-box textarea')?.value.trim();
-
+            const question = document.getElementById('questionInput').value.trim();
+            const answer = document.getElementById('answerInput').value.trim();
+            
             if (question && answer) {
-                const li = document.createElement('li');
-                li.textContent = question;
-                li.onclick = function() {
-                    alert(`الجواب: ${answer}`);
-                };
-                questionList.appendChild(li);
-                questionInput.value = '';
-                alert('تم حفظ السؤال والجواب.');
-            } else {
-                alert('يرجى كتابة السؤال والجواب قبل الحفظ.');
+                cards.push({ question, answer });
+                document.getElementById('questionInput').value = '';
+                document.getElementById('answerInput').value = '';
+                
+                currentCardIndex = cards.length - 1;
+                updateCardDisplay();
             }
         }
+
+        // Initialize the display
+        updateCardDisplay();
     </script>
-    <style>
-        .qa-box.flipped {
-            transform: rotateY(0deg);
-        }
-    </style>
 </body>
 </html>
